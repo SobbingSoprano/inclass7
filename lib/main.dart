@@ -7,16 +7,29 @@ void main() {
   );
 }
 
-// Mood Model - The "Brain" of our app
 class MoodModel with ChangeNotifier {
   String _currentMood = '🤨';
   String get currentMood => _currentMood;
+
   Color _backgroundColor = Colors.green;
+  Color get backgroundColor => _backgroundColor;
+
   final Map<String, int> _moodCounter = {"happy": 0, "sad": 0, "excited": 0};
+  Map<String,int> get moodCounter => _moodCounter;
+
+  final List<String> _moodHistory = [];
+  List<String> get moodHistory => List.unmodifiable(_moodHistory);
+
+  void _addToHistory(String mood) {
+    _moodHistory.add(mood);
+    if (_moodHistory.length > 3) _moodHistory.removeAt(0);
+  }
+
   void setHappy() {
     _currentMood = '🙂';
     _backgroundColor = Colors.yellow;
     _moodCounter["happy"] = (_moodCounter["happy"] ?? 0) + 1;
+    _addToHistory('🙂');
     notifyListeners();
   }
 
@@ -24,6 +37,7 @@ class MoodModel with ChangeNotifier {
     _currentMood = '😕';
     _backgroundColor = Colors.blue;
     _moodCounter["sad"] = (_moodCounter["sad"] ?? 0) + 1;
+    _addToHistory('😕');
     notifyListeners();
   }
 
@@ -31,9 +45,11 @@ class MoodModel with ChangeNotifier {
     _currentMood = '🥳';
     _backgroundColor = Colors.orange;
     _moodCounter["excited"] = (_moodCounter["excited"] ?? 0) + 1;
+    _addToHistory('🥳');
     notifyListeners();
   }
 }
+
 
 // Main App Widget
 class MyApp extends StatelessWidget {
@@ -64,6 +80,8 @@ class HomePage extends StatelessWidget {
             MoodButtons(),
             SizedBox(height: 20),
             MoodCounter(),
+            SizedBox(height: 20),
+            MoodHistory(),
           ],
         ),
       ),
@@ -127,6 +145,9 @@ class MoodCounter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MoodModel>(
       builder: (context, moodModel, child) {
+         if (moodModel.moodHistory.isEmpty) {
+          return Text('No Mood History Yet.');
+        }
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -134,6 +155,27 @@ class MoodCounter extends StatelessWidget {
             Text("${moodModel._moodCounter["sad"]}"),
             Text("${moodModel._moodCounter["excited"]}"),
           ],
+        );
+      },
+    );
+  }
+}
+class MoodHistory extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<MoodModel>(
+      builder: (context, moodModel, child) {
+        if (moodModel.moodHistory.isEmpty) {
+          return Text('No Mood History Yet.');
+        }
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: moodModel.moodHistory
+              .map((mood) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(mood, style: TextStyle(fontSize: 40)),
+                  ))
+              .toList(),
         );
       },
     );

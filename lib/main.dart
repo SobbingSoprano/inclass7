@@ -11,18 +11,22 @@ void main() {
 class MoodModel with ChangeNotifier {
   String _currentMood = '🤨';
   String get currentMood => _currentMood;
+  Color _backgroundColor = Colors.green;
   void setHappy() {
     _currentMood = '🙂';
+    _backgroundColor = Colors.yellow;
     notifyListeners();
   }
 
   void setSad() {
     _currentMood = '😕';
+    _backgroundColor = Colors.blue;
     notifyListeners();
   }
 
   void setExcited() {
     _currentMood = '🥳';
+    _backgroundColor = Colors.orange;
     notifyListeners();
   }
 }
@@ -67,7 +71,16 @@ class MoodDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MoodModel>(
       builder: (context, moodModel, child) {
-        return Text(moodModel.currentMood, style: TextStyle(fontSize: 100));
+        return Container(
+          width: 150,
+          height: 150,
+          decoration: BoxDecoration(
+            color: moodModel._backgroundColor,
+            shape: BoxShape.circle,
+          ),
+          alignment: Alignment.center,
+          child: Text(moodModel.currentMood, style: TextStyle(fontSize: 80)),
+        );
       },
     );
   }

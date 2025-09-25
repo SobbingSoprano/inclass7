@@ -165,9 +165,6 @@ class MoodHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MoodModel>(
       builder: (context, moodModel, child) {
-        if (moodModel.moodHistory.isEmpty) {
-          return Text('No Mood History Yet.');
-        }
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: moodModel.moodHistory

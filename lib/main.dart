@@ -9,20 +9,20 @@ void main() {
 
 // Mood Model - The "Brain" of our app
 class MoodModel with ChangeNotifier {
-  String _currentMood = '😊 use your own img here ';
+  String _currentMood = '🤨';
   String get currentMood => _currentMood;
   void setHappy() {
-    _currentMood = '😊 use your own img here ';
+    _currentMood = '🙂';
     notifyListeners();
   }
 
   void setSad() {
-    _currentMood = '😢 use your own img here ';
+    _currentMood = '😕';
     notifyListeners();
   }
 
   void setExcited() {
-    _currentMood = '🎉 use your own img here ';
+    _currentMood = '🥳';
     notifyListeners();
   }
 }
@@ -84,19 +84,19 @@ class MoodButtons extends StatelessWidget {
           onPressed: () {
             Provider.of<MoodModel>(context, listen: false).setHappy();
           },
-          child: Text('Happy 😊 use your own img here '),
+          child: Text('🙂'),
         ),
         ElevatedButton(
           onPressed: () {
             Provider.of<MoodModel>(context, listen: false).setSad();
           },
-          child: Text('Sad 😢 use your own img here '),
+          child: Text('😕'),
         ),
         ElevatedButton(
           onPressed: () {
             Provider.of<MoodModel>(context, listen: false).setExcited();
           },
-          child: Text('Excited 🎉 use your own img here '),
+          child: Text('🥳'),
         ),
       ],
     );

@@ -12,21 +12,25 @@ class MoodModel with ChangeNotifier {
   String _currentMood = '🤨';
   String get currentMood => _currentMood;
   Color _backgroundColor = Colors.green;
+  final Map<String, int> _moodCounter = {"happy": 0, "sad": 0, "excited": 0};
   void setHappy() {
     _currentMood = '🙂';
     _backgroundColor = Colors.yellow;
+    _moodCounter["happy"] = (_moodCounter["happy"] ?? 0) + 1;
     notifyListeners();
   }
 
   void setSad() {
     _currentMood = '😕';
     _backgroundColor = Colors.blue;
+    _moodCounter["sad"] = (_moodCounter["sad"] ?? 0) + 1;
     notifyListeners();
   }
 
   void setExcited() {
     _currentMood = '🥳';
     _backgroundColor = Colors.orange;
+    _moodCounter["excited"] = (_moodCounter["excited"] ?? 0) + 1;
     notifyListeners();
   }
 }
@@ -58,6 +62,8 @@ class HomePage extends StatelessWidget {
             MoodDisplay(),
             SizedBox(height: 50),
             MoodButtons(),
+            SizedBox(height: 20),
+            MoodCounter(),
           ],
         ),
       ),
@@ -112,6 +118,24 @@ class MoodButtons extends StatelessWidget {
           child: Text('🥳'),
         ),
       ],
+    );
+  }
+}
+
+class MoodCounter extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<MoodModel>(
+      builder: (context, moodModel, child) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text("${moodModel._moodCounter["happy"]}"),
+            Text("${moodModel._moodCounter["sad"]}"),
+            Text("${moodModel._moodCounter["excited"]}"),
+          ],
+        );
+      },
     );
   }
 }
